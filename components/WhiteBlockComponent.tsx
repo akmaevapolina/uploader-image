@@ -84,6 +84,32 @@ const WhiteBlockComponent = ({selectedImage}) => {
 
     const items = ['Custom', 'Portait', 'Landscape', 'Square'];
 
+    const handleButtonClick = () => {
+      fetch('https://jsonplaceholder.typicode.com/posts', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            selectedItem,
+            widthValue,
+            heightValue,
+        }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Ошибка HTTP: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Результат запроса:', data);
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+    });
+};
+
     return (
       <View className='w-1134 h-816 bg-violet rounded-32 items-center pt-2'>
           <View style={styles.shadow} className='w-1118 h-702 bg-violet rounded-28 py-16 px-28 p-16'>
@@ -139,7 +165,7 @@ const WhiteBlockComponent = ({selectedImage}) => {
                   </View>
                 </View>
                 <View className='w-107 h-48 rounded-40 justify-center bg-orange'>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={handleButtonClick}>
                     <Text style={styles.fontFamilyInter} className='font-black text-15 text-white text-center'>Uncrop</Text>
                   </TouchableOpacity>
               </View>
