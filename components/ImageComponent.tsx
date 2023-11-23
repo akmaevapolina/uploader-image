@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Image, View, PanResponder } from 'react-native';
-
 import { useSpring, animated } from 'react-spring';
 import { useDrag, usePinch} from 'react-use-gesture';
 
@@ -14,7 +13,7 @@ const ImageComponent = ({image}) => {
     })
   }, [image]);
 
-  const [scale, setScale] = useState(1);
+  const [scale, setScale] = useState(0.7);
 
   const imgPos = useSpring({ x: 0, y: 0, scale: 1 });
 
@@ -59,7 +58,7 @@ return(
         x: imgPos.y,
       }}>
       <View>
-        <Image source={{ uri: image }} style={{ width: imageSize.width * scale, height: imageSize.height * scale }} resizeMode='cover' />
+        <Image source={{ uri: image }} style={{ width: imageSize.width * scale, height: imageSize.height * scale }}  />
         <View className='absolute w-handle h-handle bg-white rounded-3 top-5px left-5px' {...panResponderTopHandlers.panHandlers} />
         <View className='absolute w-handle h-handle bg-white rounded-3 top-5px right-5px' {...panResponderTopHandlers.panHandlers} />
         <View className='absolute w-handle h-handle bg-white rounded-3 bottom-5px left-5px' {...panResponderBottomHandlers.panHandlers} />

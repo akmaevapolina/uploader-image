@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
-import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, StyleSheet, Image } from 'react-native';
 import Svg, { Path } from "react-native-svg"
 import CrossIcon from './CrossIcon';
 import * as Font from 'expo-font';
@@ -12,74 +12,80 @@ Font.loadAsync({
 });
 
 const WhiteBlockComponent = ({selectedImage}) => {
+  
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState('Custom');
+  const [hoveredItem, setHoveredItem] = useState(null);
+  const [widthValue, setWidthValue] = useState('906');
+  const [heightValue, setHeightValue] = useState('585');
+  const [capturedUri, setCupturedUri] = useState(null)
 
-    const [isOpen, setIsOpen] = useState(false);
-    const [selectedItem, setSelectedItem] = useState('Custom');
-    const [hoveredItem, setHoveredItem] = useState(null);
-    const [widthValue, setWidthValue] = useState('906');
-    const [heightValue, setHeightValue] = useState('585');
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
 
-    const toggleDropdown = () => {
-        setIsOpen(!isOpen);
-    };
+  const handleCapture = (capturedUri) => {
+      console.log(capturedUri)
+      setCupturedUri(capturedUri)
+  } 
 
-    const handleSelectItem = (item) => {
-        setSelectedItem(item);
-        setIsOpen(false);
+  const handleSelectItem = (item) => {
+    setSelectedItem(item);
+    setIsOpen(false);
 
-        switch (item) {
-            case 'Portait':
-                setWidthValue('240');
-                setHeightValue('580');
-                break;
-            case 'Landscape':
-                setWidthValue('580');
-                setHeightValue('240');
-                break;
-            case 'Square':
-                setWidthValue('580');
-                setHeightValue('580');
-                break;
-            case 'Custom':
-                setWidthValue('906');
-                setHeightValue('585')
-                break;
-        }
+    switch (item) {
+      case 'Portait':
+        setWidthValue('240');
+        setHeightValue('580');
+        break;
+      case 'Landscape':
+        setWidthValue('580');
+        setHeightValue('240');
+        break;
+      case 'Square':
+        setWidthValue('580');
+        setHeightValue('580');
+        break;
+      case 'Custom':
+        setWidthValue('906');
+        setHeightValue('585')
+        break;
+      }
     };
 
     const handleHoverIn = (item) => {
-        setHoveredItem(item);
+      setHoveredItem(item);
     };
 
     const handleHoverOut = () => {
-        setHoveredItem(null);
+      setHoveredItem(null);
     };
 
     const handleWidthChange = (value) => {
-        setWidthValue(value);
-        updateSelectedItem(value, heightValue);
+      setWidthValue(value);
+      updateSelectedItem(value, heightValue);
     };
 
     const handleHeightChange = (value) => {
-        setHeightValue(value);
-        updateSelectedItem(widthValue, value);
+      setHeightValue(value);
+      updateSelectedItem(widthValue, value);
     };
 
     const updateSelectedItem = (width, height) => {
-        if (width === '576' && height === '1024') {
-            setSelectedItem('Portait');
-        } else if (width === '1024' && height === '576') {
-            setSelectedItem('Landscape');
-        } else if (width === '1024' && height === '1024') {
-        setSelectedItem('Square');
-        } else {
-        setSelectedItem('Custom');
-        }
+      if (width === '576' && height === '1024') {
+        setSelectedItem('Portait');
+      } else if (width === '1024' && height === '576') {
+        setSelectedItem('Landscape');
+      } else if (width === '1024' && height === '1024') {
+      setSelectedItem('Square');
+      } else {
+      setSelectedItem('Custom');
+      }
     };
 
     const handleDimensionsChange = (newWidth, newHeight) => {
-        setWidthValue(String(newWidth));
-        setHeightValue(String(newHeight));
+      setWidthValue(String(newWidth));
+      setHeightValue(String(newHeight));
     }
 
     const items = ['Custom', 'Portait', 'Landscape', 'Square'];
@@ -95,20 +101,27 @@ const WhiteBlockComponent = ({selectedImage}) => {
             widthValue,
             heightValue,
         }),
-    })
-    .then(response => {
+      })
+      .then(response => {
         if (!response.ok) {
             throw new Error(`Ошибка HTTP: ${response.status}`);
         }
         return response.json();
-    })
-    .then(data => {
+      })
+      .then(data => {
         console.log('Результат запроса:', data);
-    })
-    .catch(error => {
+      })
+      .catch(error => {
         console.error('Ошибка:', error);
-    });
-};
+      });
+      handleCapture(selectedImage)
+
+      if (rectangleRef.current) {
+        rectangleRef.current.triggerRectangleRequest();
+      }
+    };
+    
+     const rectangleRef = useRef();
 
     return (
       <View className='w-1134 h-816 bg-violet rounded-32 items-center pt-2'>
@@ -118,7 +131,14 @@ const WhiteBlockComponent = ({selectedImage}) => {
                   widthValue={widthValue}
                   heightValue={heightValue}
                   onDimensionsChange={handleDimensionsChange}
-                  selectedImage={selectedImage}/>
+                  selectedImage={selectedImage}
+                  onCapture={handleCapture}
+                  setRectangleRef={rectangleRef}/>
+                  {capturedUri && (
+                    <View>
+                      <Image source={{ uri: capturedUri }} style={{ flex: 1 }} />
+                    </View>
+                  )}
               </View>
           </View>
           <View className='flex-1 justify-center'>
