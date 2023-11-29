@@ -1,27 +1,42 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import ImageUploader from './components/ImageUploader';
-import MainComponent from './components/MainComponent'
+import ImageUncroper from './components/ImageUncroper';
+import UncropComponent from './components/UncropComponent'
+import ImageUpscaler from './components/ImageUpscaler';
+import UpscaleComponent from './components/UpscaleComponent';
 
 import './styles.css'
 
 export default function App() {
 
-  const [imageUploaded, setImageUploaded] = useState(false);
+  const [imageToUncropUploaded, setImageToUncropUploaded] = useState(false);
+  const [imageToUpscaleUploaded, setImageToUpscaleUploaded] = useState(false)
   const [selectedImage, setSelectedImage] = useState(null)
 
-  const handleImageSelect = (imageUri) => {
+  const handleImageToUncropSelect = (imageUri) => {
     setSelectedImage(imageUri);
-    setImageUploaded(true);
+    setImageToUncropUploaded(true);
   };
+
+  const handleImageToUpscaleSelect = (imageUri) => {
+    setSelectedImage(imageUri);
+    setImageToUpscaleUploaded(true);
+  };
+
 
   return (
     <View className='flex-1'>
-      {imageUploaded ? (
-        <MainComponent selectedImage={selectedImage} />
+      {imageToUncropUploaded ? (
+        <UncropComponent selectedImage={selectedImage} />
       ) : (
-        <ImageUploader onImageSelect={handleImageSelect} />
+        <ImageUncroper onImageSelect={handleImageToUncropSelect} />
       )}
+      {imageToUpscaleUploaded ? (
+        <UpscaleComponent selectedImage={selectedImage} />
+      ) : (
+        <ImageUpscaler onImageSelect={handleImageToUpscaleSelect} />
+      )}
+      
     </View>    
   );
 }

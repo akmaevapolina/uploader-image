@@ -711,6 +711,14 @@ video {
     width: 134px;
 }
 
+.w-166 {
+    width: 166px;
+}
+
+.w-237 {
+    width: 237px;
+}
+
 .w-340 {
     width: 340px;
 }
@@ -773,6 +781,10 @@ video {
 
 .h-336 {
     height: 336px;
+}
+
+.h-428 {
+    height: 428px;
 }
 
 .h-702 {
@@ -969,6 +981,10 @@ video {
     margin-right: 0.625rem; /* 10px */
 }
 
+.mr-15 {
+    margin-right: 15px;
+}
+
 .mt-min-35px {
     margin-top: -35px;
 }
@@ -996,4 +1012,8 @@ video {
 
 .overflow-hidden {
     overflow: hidden;
+}
+
+.fs-18 {
+    font-size: 18px;
 }

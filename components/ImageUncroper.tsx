@@ -4,6 +4,7 @@ import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { ImageLibraryOptions, launchImageLibrary } from 'react-native-image-picker';
 import * as Font from 'expo-font';
 import Svg, { Path } from "react-native-svg"
+import UncropInputs from './UncropInputs';
 
 
 Font.loadAsync({
@@ -11,7 +12,7 @@ Font.loadAsync({
   'Inter': require('/assets/fonts/Inter.ttf'),
 });
 
-const ImageUploader = ({ onImageSelect }) => {
+const ImageUncroper = ({ onImageSelect }) => {
 
     const [selectedImage, setSelectedImage] = useState(null);
 
@@ -19,7 +20,7 @@ const ImageUploader = ({ onImageSelect }) => {
         mediaType:'photo',
     }
 
-     const handleImageUpload = () => {
+    const handleImageUpload = () => {
         launchImageLibrary(options, response => {
             if (response.assets.length > 0) {
                 const imageUri = response.assets[0].uri;
@@ -29,9 +30,13 @@ const ImageUploader = ({ onImageSelect }) => {
         });
     };
 
+    const handleButtonClick = () => {
+        console.log('worked!')
+    }
+
     return (
         <View className='flex-1 items-center justify-center'>
-            <View className='bg-violet rounded-32 w-580 h-336'>
+            <View className='bg-violet rounded-32 w-580 h-428'>
                 <View className='items-center pt-2 pb-16'>
                     <View className='w-564 h-320 p-16 py-16 px-28 rounded-28 border-1-5 border-dashed border-white'>
                         <View className='items-center w-340 h-192 gap-8'>
@@ -47,11 +52,12 @@ const ImageUploader = ({ onImageSelect }) => {
                             </TouchableOpacity>
                             <View className='w-340 h-20 gap-2 items-center justify-center'>
                                 <Text style={styles.fontFamilyArchivo} className='text-40 font-semibold leading-48 tracking-min text-center text-white'>Upload file</Text>
-                                <Text style={styles.fontFamilyInter} className='font-medium text-16 leading-6 text-center text-white'>To Upscale</Text>
+                                <Text style={styles.fontFamilyInter} className='font-medium text-16 leading-6 text-center text-white'>To Uncrop</Text>
                             </View>
                         </View>
                     </View>
                 </View>
+                <UncropInputs onPressButton={handleButtonClick} onSizeChange={null} width={null} height={null} onSelectItem={null} />
             </View>
         </View>
     )
@@ -79,4 +85,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ImageUploader;
+export default ImageUncroper;
